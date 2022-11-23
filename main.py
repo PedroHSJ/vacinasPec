@@ -7,4 +7,3 @@ try:
    #vacina2anos()
 except psycopg2.Error as e:
     print(f"Error: {e}")
-## valmir é o nome do banco de dados

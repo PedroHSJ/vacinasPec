@@ -26,7 +26,7 @@ def vacina2anos(codibge, dbname):
         for data in cursorPEC:
             array.append(data)
             numero_linhas += 1
-        
+        print("Número de linhas: ", numero_linhas)
         connectionPEC.commit()
         cursorPEC.close()
         connectionPEC.close()

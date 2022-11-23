@@ -3,6 +3,7 @@ def insertVacina():
         INSERT INTO 
             vacinas_pec(
             co_cidadao,
+            sexo,
             cpf_cidadao,
             nu_cns,
             no_cidadao,
@@ -46,6 +47,8 @@ def insertVacina():
             tetra_viral_dose_unica,
             varicela_primeira_dose,
             varicela_segunda_dose,
+            hpv_primeira_dose,
+            hpv_segunda_dose,
             meningococia_dose,
             meningococia_dose_reforco,
             dt_nascimento,
@@ -64,6 +67,9 @@ def insertVacina():
             ?,
             ?,
             ?,
+            ?,
+            DATE(?),
+            DATE(?),
             DATE(?),
             DATE(?),
             DATE(?),

@@ -3,6 +3,8 @@ def selectVacina(codibge):
 Select Distinct
 -- Cast(Date_Part('year', Age(tb_fat_vacinacao.dt_nascimento)) As Int) As idade,
     tb_fat_cidadao_pec.co_cidadao,
+    case when tb_fat_cidadao_pec.co_dim_sexo = 1 then 'Masculino'
+    when tb_fat_cidadao_pec.co_dim_sexo = 2 then 'Feminino' end as sexo,
    tb_fat_cidadao_pec.nu_cpf_cidadao as cpf_cidadao,
     tb_fat_cidadao_pec.nu_cns,
     tb_fat_cidadao_pec.no_cidadao,
@@ -48,7 +50,7 @@ Select Distinct
         Then tb_dim_tempo.dt_registro
     End As Hepatite_Dose,
     Case
-        When tb_dim_imunobiologico.no_imunobiologico Like '%Hepatite B%' And
+        When tb_dim_imunobiologico.no_imunobiologico = 'Hepatite B' And
             tb_dim_dose_imunobiologico.sg_dose_imunobiologico = 'D1'
         Then tb_dim_tempo.dt_registro
     End As Hepatite_primeira_Dose,
@@ -209,7 +211,19 @@ Select Distinct
             tb_dim_dose_imunobiologico.sg_dose_imunobiologico = 'D2'
         Then tb_dim_tempo.dt_registro
     End As varicela_segunda_dose,
-   
+     case When (tb_dim_imunobiologico.no_imunobiologico = 'HPV Bivalente' or
+      tb_dim_imunobiologico.no_imunobiologico = 'HPV Quadrivalente')
+      And
+            tb_dim_dose_imunobiologico.sg_dose_imunobiologico = 'D1'
+        Then tb_dim_tempo.dt_registro
+    End As hpv_primeira_dose,
+     case When (tb_dim_imunobiologico.no_imunobiologico = 'HPV Bivalente' or
+      tb_dim_imunobiologico.no_imunobiologico = 'HPV Quadrivalente')
+      And
+            tb_dim_dose_imunobiologico.sg_dose_imunobiologico = 'D2'
+        Then tb_dim_tempo.dt_registro
+    End As hpv_segunda_dose,
+     
     Case
         When tb_dim_imunobiologico.no_imunobiologico = 'Meningocócica ACWY' And
             tb_dim_dose_imunobiologico.sg_dose_imunobiologico = 'D'
@@ -252,9 +266,8 @@ From
     tb_fat_atendimento_individual On tb_fat_atendimento_individual.co_fat_cidadao_pec =
             tb_fat_cidadao_pec.co_seq_fat_cidadao_pec Left Join
     tb_dim_tempo On tb_fat_vacinacao_vacina.co_dim_tempo = tb_dim_tempo.co_seq_dim_tempo
-Where
-    tb_dim_municipio.co_ibge = '{codibge}'
-    and
-    tb_fat_vacinacao.dt_nascimento >= current_date - interval '3' year
+ Where 
+     tb_dim_municipio.co_ibge = '{codibge}'    and
+    tb_fat_vacinacao.dt_nascimento >= current_date - interval '15' year
     order by tb_dim_tempo.dt_registro desc
     '''
