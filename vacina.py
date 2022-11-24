@@ -2,7 +2,8 @@ import mariadb
 import psycopg2
 from insertVacina import insertVacina
 from selectVacina import selectVacina
-from lista import lista
+from enviarEmail import enviarEmail
+
 
 def vacina2anos(codibge, dbname):
     try:
@@ -63,6 +64,7 @@ def vacina2anos(codibge, dbname):
 
     except psycopg2.Error as e:
         print(f"Erro no banco do PEC: {e}")
+        enviarEmail(e, 'PEC')
     except mariadb.Error as e:
-        print(f"Erro no banco esusAtendSaude: {e}")
-
+        print(f"Erro no banco {dbname}: {e}")
+        enviarEmail(e, dbname)
